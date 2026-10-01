@@ -1,0 +1,51 @@
+name: NCDR Alert Bot
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # 每 10 分鐘（GitHub 排程可能延遲數分鐘）
+  workflow_dispatch:
+
+# 避免兩次執行同時讀寫 state 造成重複推播
+concurrency:
+  group: ncdr-alert
+  cancel-in-progress: false
+
+permissions:
+  contents: write   # 需要把 data/sent_alerts.json 提交回 repo
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Run bot
+        id: bot
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python src/main.py
+
+      # 即使上一步失敗（部分推播已成功）也要保存 state，避免下次重複推播
+      - name: Commit state
+        if: always()
+        run: |
+          git config user.name "ncdr-bot"
+          git config user.email "ncdr-bot@users.noreply.github.com"
+          git add data/sent_alerts.json
+          if git diff --cached --quiet; then
+            echo "state unchanged"
+          else
+            git commit -m "chore: update sent alerts state [skip ci]"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push
+          fi
