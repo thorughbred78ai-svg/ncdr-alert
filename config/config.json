@@ -1,0 +1,7 @@
+{
+  "areas": ["桃園市"],
+  "feed_lookback_days": 2,
+  "state_retention_days": 7,
+  "error_notification_cooldown_minutes": 60,
+  "allow_areadesc_text_fallback": false
+}
