@@ -1,0 +1,6 @@
+# Python 暫存
+__pycache__/
+*.pyc
+
+# state.py 寫入時產生的暫存檔
+data/*.tmp
