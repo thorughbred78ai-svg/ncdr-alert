@@ -4,6 +4,11 @@
     "sent_at": "2026-10-02T09:36:35.430473+00:00",
     "telegram_message_id": 269
   },
+  "CWA-Weather_extremely-rain_202610021835001": {
+    "hash": "258a52422a6d54c425c2044e8aef8a96aa78f991382b2f78e7db6a55519e390f",
+    "sent_at": "2026-10-02T10:53:13.190617+00:00",
+    "telegram_message_id": 270
+  },
   "CWA-Weather_strong-wind_202610011037001": {
     "hash": "a81e79ba192ec0db83128237b49c96dabbd92fae75dc3d2ee1fa0dc02deaada7",
     "sent_at": "2026-10-01T02:53:11.223785+00:00",
